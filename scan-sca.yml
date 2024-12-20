@@ -1,0 +1,28 @@
+stages:
+  - build
+  - test
+  - scascan
+
+variables:
+  SNYK_TOKEN: "2f4afa39-c493-080c1a8f9014"
+
+build:
+  stage: build
+  image: maven:3.8.5-openjdk-11-slim
+  script:
+    - mvn clean package
+
+test:
+  stage: test
+  image: maven:3.8.5-openjdk-11-slim
+  script:
+    - mvn clean test
+
+scascan:
+  stage: scascan
+  image: maven:3.8.5-openjdk-11-slim
+  script:
+    - curl -sS https://github.com/snyk/snyk/releases/download/v1.1021.0/snyk-linux-$(uname -m) > snyk && chmod +x snyk
+    - ./snyk auth $SNYK_TOKEN
+    - ./snyk test --all-projects
+  allow_failure: false
