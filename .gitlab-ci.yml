@@ -31,8 +31,8 @@ sast-scan-app:
       - .sonar/cache
   script:
     - mvn verify sonar:sonar \
-        -Dsonar.projectKey=BIR-75_just-another-vulnerable-java-application \
-        -Dsonar.organization=BIR-75 \
+        -Dsonar.projectKey=a91loic_just-another-vulnerable-java-application \
+        -Dsonar.organization=a91loic1 \
         -Dsonar.host.url=$SONAR_HOST_URL \
         -Dsonar.login=$SONAR_TOKEN \
         -Dsonar.qualitygate.wait=true \
