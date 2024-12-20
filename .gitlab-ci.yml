@@ -1,0 +1,40 @@
+stages:
+  - build
+  - test
+  - sastscan
+
+variables:
+  SONAR_URL: "https://sonarcloud.io/"
+  SONAR_ORG: "a91loic1"
+  SONAR_PROJECT_KEY: "a91loic_just-another-vulnerable-java-application"
+  SONAR_TOKEN: "ccf28fa6e9ca120110106076c4be403c78e8d844"
+  SONAR_COVERAGE_THRESHOLD: 50
+
+build-app:
+  stage: build
+  image: maven:3.8.5-openjdk-17-slim
+  script:
+    - mvn clean package
+
+test-app:
+  stage: test
+  image: maven:3.8.5-openjdk-17-slim
+  script:
+    - mvn clean test
+
+sast-scan-app:
+  stage: sastscan
+  image: maven:3-openjdk-17
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
+  script:
+    - mvn verify sonar:sonar \
+        -Dsonar.projectKey=BIR-75_just-another-vulnerable-java-application \
+        -Dsonar.organization=BIR-75 \
+        -Dsonar.host.url=$SONAR_HOST_URL \
+        -Dsonar.login=$SONAR_TOKEN \
+        -Dsonar.qualitygate.wait=true \
+        -Dsonar.qualitygate.conditions=coverage>50
+  allow_failure: false
