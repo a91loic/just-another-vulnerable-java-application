@@ -6,19 +6,19 @@ stages:
 variables:
   SNYK_TOKEN: "2f4afa39-c493-080c1a8f9014"
 
-build:
+build-app:
   stage: build
   image: maven:3.8.5-openjdk-11-slim
   script:
     - mvn clean package
 
-test:
+test-app:
   stage: test
   image: maven:3.8.5-openjdk-11-slim
   script:
     - mvn clean test
 
-scascan:
+scascan-app:
   stage: scascan
   image: maven:3.8.5-openjdk-11-slim
   script:
